@@ -1,5 +1,5 @@
 // src/App.tsx
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import NominationList from './components/NominationLists';
@@ -11,6 +11,9 @@ import AdminClaimsDashboard from './components/AdminClaimsDashboard';
 import pb from './lib/pocketbase';
 import ReportClaim from './components/ReportClaim';
 import AdminApprovals from './components/AdminApprovals';
+// 1. Change the import from BrowserRouter to HashRouter
+
+// ... the rest of your App.tsx remains exactly the same!
 
 // 1. Protected Route Wrapper (For standard investors)
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
