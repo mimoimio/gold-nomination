@@ -14,5 +14,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: 'gold-nomination'
+  base: '/', // Change this back to '/'
 })

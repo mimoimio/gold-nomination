@@ -11,6 +11,7 @@ import AdminClaimsDashboard from './components/AdminClaimsDashboard';
 import pb from './lib/pocketbase';
 import ReportClaim from './components/ReportClaim';
 import AdminApprovals from './components/AdminApprovals';
+import Signup from './components/Signup';
 // 1. Change the import from BrowserRouter to HashRouter
 
 // ... the rest of your App.tsx remains exactly the same!
@@ -77,6 +78,7 @@ function App() {
 
               {/* Public Route */}
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
 
               {/* Investor Routes */}
               <Route
@@ -97,7 +99,6 @@ function App() {
                 path="/admin/claims"
                 element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>}
               />
-
               <Route
                 path="/admin/approvals"
                 element={<AdminRoute><AdminApprovals /></AdminRoute>}
