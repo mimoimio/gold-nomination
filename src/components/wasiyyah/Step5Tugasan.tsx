@@ -1,7 +1,7 @@
 // src/components/wasiyyah/Step5Tugasan.tsx
 import type { WasiyyahState } from '../../types/wasiyyah';
 import ConsentFooter from './ConsentFooter';
-import { Info, CheckSquare } from "lucide-react";
+import { Info } from "lucide-react";
 
 interface Props {
     data: WasiyyahState;
