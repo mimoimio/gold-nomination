@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LogOut, User, Coins, Menu } from "lucide-react";
+import { ModeToggle } from './mode-toggle';
 
 export default function Header() {
     const { user, isValid } = useAuth();
@@ -70,6 +71,9 @@ export default function Header() {
                 <Link to="/user/claim" className={linkClass('/user/claim')} onClick={closeMenu}>
                     Report Demise
                 </Link>
+                <Link to="/wasiyyah/create" className={linkClass('/wasiyyah/create')} onClick={closeMenu}>
+                    Create Wasiyyah
+                </Link>
             </>
         );
     };
@@ -121,8 +125,9 @@ export default function Header() {
                 </nav>
 
                 {/* User Profile Menu (Stays on the right for both mobile and desktop) */}
-                {isValid && user && (
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
+                    <ModeToggle />
+                    {isValid && user && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-9 w-9 md:h-10 md:w-10 rounded-full">
@@ -157,8 +162,8 @@ export default function Header() {
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                    </div>
-                )}
+                    )}
+                </div>
 
             </div>
         </header>

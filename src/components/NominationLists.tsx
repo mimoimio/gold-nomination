@@ -98,6 +98,7 @@ export default function NominationList() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-8">
+            <h3 className="text-xl font-semibold text-left">Manage Beneficiaries</h3>
             {/* 1. Account Summary Card */}
             <Card className="bg-muted/30 shadow-sm">
                 <CardContent className="p-6">
@@ -163,16 +164,16 @@ export default function NominationList() {
                         {nominations.map((nom) => (
                             <Card key={nom.id} className="overflow-hidden shadow-sm">
                                 <CardContent className="p-0">
-                                    <div className="flex items-center justify-between p-4 sm:p-6">
+                                    <div className="flex items-center justify-between p-1 md:p-4 sm:p-6">
 
                                         {/* Nominee Info */}
-                                        <div className="flex items-start gap-4 w-full">
+                                        <div className="flex items-start gap-1 md:gap-4 w-full">
                                             <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
                                                 <UserIcon className="h-5 w-5 text-muted-foreground" />
                                             </div>
                                             <div className='w-full'>
                                                 <h4 className="text-left font-semibold">{nom.nominee_name}</h4>
-                                                <div className="flex items-center gap-2 mt-1">
+                                                <div className="flex items-center md:gap-2 mt-1">
                                                     <span className="text-sm text-muted-foreground">{nom.relationship}</span>
                                                     <span className="text-muted-foreground">•</span>
                                                     <span className="text-sm text-muted-foreground">{nom.nominee_nric}</span>
@@ -181,7 +182,7 @@ export default function NominationList() {
                                         </div>
 
                                         {/* Legal Role & Allocation */}
-                                        <div className="flex items-center gap-6">
+                                        <div className="flex flex-col md:flex-row items-center gap-6">
                                             {/* Shariah Role Badge */}
                                             <div className="text-right">
                                                 <Badge variant={nom.role_type === 'Hibah' ? "default" : "secondary"}>

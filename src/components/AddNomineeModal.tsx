@@ -53,20 +53,20 @@ export default function AddNomineeModal({ isOpen, onClose, onSubmit, maxAllocati
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+                <form onSubmit={handleSubmit} className="space-y-1 md:space-y-6 mt-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
+                        <div className="space-y-1 md:space-y-2">
                             <Label htmlFor="name">Full Name (as per IC)</Label>
                             <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Ahmad Faizal" />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-1 md:space-y-2">
                             <Label htmlFor="nric">NRIC Number</Label>
                             <Input id="nric" required value={nric} onChange={(e) => setNric(e.target.value)} placeholder="e.g. 900101-14-5555" />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
+                        <div className="space-y-1 md:space-y-2">
                             <Label>Relationship</Label>
                             <Select required value={relationship} onValueChange={setRelationship}>
                                 <SelectTrigger>
@@ -81,7 +81,7 @@ export default function AddNomineeModal({ isOpen, onClose, onSubmit, maxAllocati
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-1 md:space-y-2">
                             <Label htmlFor="allocation">Allocation (%)</Label>
                             <Input
                                 id="allocation"
@@ -98,7 +98,7 @@ export default function AddNomineeModal({ isOpen, onClose, onSubmit, maxAllocati
                         </div>
                     </div>
 
-                    <div className="space-y-3 pt-2">
+                    <div className="md:space-y-3 pt-2">
                         {/* Swapped text-foreground for text-foreground */}
                         <Label className="text-base font-semibold text-foreground">Declare Shariah Legal Role</Label>
                         <RadioGroup value={roleType} onValueChange={(v: "Hibah" | "Pentadbir") => setRoleType(v)} className="grid grid-cols-2 gap-4">
@@ -108,7 +108,7 @@ export default function AddNomineeModal({ isOpen, onClose, onSubmit, maxAllocati
                                 <RadioGroupItem value="Hibah" id="hibah" className="peer sr-only" />
                                 <Label
                                     htmlFor="hibah"
-                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all"
+                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-2 md:p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all"
                                 >
                                     <Gift className="mb-3 h-6 w-6" />
                                     <span className="font-bold">Hibah (Absolute Gift)</span>
@@ -123,7 +123,7 @@ export default function AddNomineeModal({ isOpen, onClose, onSubmit, maxAllocati
                                 <RadioGroupItem value="Pentadbir" id="pentadbir" className="peer sr-only" />
                                 <Label
                                     htmlFor="pentadbir"
-                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all"
+                                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-2 md:p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all"
                                 >
                                     <Scale className="mb-3 h-6 w-6" />
                                     <span className="font-bold">Pentadbir (Administrator)</span>

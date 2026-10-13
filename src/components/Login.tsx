@@ -30,6 +30,8 @@ export default function Login() {
             navigate('/dashboard');
 
         } catch (err: any) {
+            console.log("Is Aborted?:", err.isAbort); // Checks for auto-cancellation
+            console.log("Original Error:", err.originalError); // Reveals network/system error
             console.error("Login failed:", err);
             setError('Invalid email or password. Please try again.');
         } finally {

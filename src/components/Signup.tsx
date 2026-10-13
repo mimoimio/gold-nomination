@@ -55,7 +55,8 @@ export default function Signup() {
             navigate('/dashboard');
         } catch (err: any) {
             console.error("Signup failed:", err);
-            setError(err.response?.message || "Failed to create account. Email or NRIC may already be in use.");
+            console.error("Details", err.response);
+            setError(err.response?.data?.password?.message || "Failed to create account. Email or NRIC may already be in use.");
         } finally {
             setIsLoading(false);
         }

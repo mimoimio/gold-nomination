@@ -57,7 +57,7 @@ export default function ReportClaim() {
     if (isSuccess) {
         return (
             <div className="max-w-2xl mx-auto p-6 mt-10 text-center">
-                <Card className="border-green-200 bg-green-50">
+                <Card className="border-primary bg-secondary">
                     <CardContent className="p-8 space-y-4">
                         <h2 className="text-2xl font-bold text-green-800">Claim Submitted Successfully</h2>
                         <p className="text-green-700">

@@ -12,45 +12,28 @@ import pb from './lib/pocketbase';
 import ReportClaim from './components/ReportClaim';
 import AdminApprovals from './components/AdminApprovals';
 import Signup from './components/Signup';
-// 1. Change the import from BrowserRouter to HashRouter
 
-// ... the rest of your App.tsx remains exactly the same!
+// NEW IMPORT
+import CreateWasiyyah from './components/CreateWasiyyah';
 
-// 1. Protected Route Wrapper (For standard investors)
+// ... (Your wrappers remain exactly the same)
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isValid, user } = useAuth();
-
-  if (!isValid) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Prevent Admins from accessing investor-only pages
-  if (user?.role === 'admin') {
-    return <Navigate to="/admin/claims" replace />;
-  }
-
-  return children;
-};
-
-// 2. Admin Route Wrapper
-const AdminRoute = ({ children }: { children: JSX.Element }) => {
-  const { user, isValid } = useAuth();
-
-  if (!isValid || user?.role !== 'admin') {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  return children;
-};
-
-// 3. Root Redirector
-// Intelligently routes the user based on their login state and role
-const RootRoute = () => {
-  const { isValid, user } = useAuth();
-
   if (!isValid) return <Navigate to="/login" replace />;
   if (user?.role === 'admin') return <Navigate to="/admin/claims" replace />;
+  return children;
+};
 
+const AdminRoute = ({ children }: { children: JSX.Element }) => {
+  const { user, isValid } = useAuth();
+  if (!isValid || user?.role !== 'admin') return <Navigate to="/dashboard" replace />;
+  return children;
+};
+
+const RootRoute = () => {
+  const { isValid, user } = useAuth();
+  if (!isValid) return <Navigate to="/login" replace />;
+  if (user?.role === 'admin') return <Navigate to="/admin/claims" replace />;
   return <Navigate to="/dashboard" replace />;
 };
 
@@ -68,43 +51,28 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-background text-foreground flex flex-col">
-          {/* The Header now acts as the global Nav component */}
           <Header />
-
           <main className="flex-1">
             <Routes>
-              {/* The Root Route */}
               <Route path="/" element={<RootRoute />} />
-
-              {/* Public Route */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
 
               {/* Investor Routes */}
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/manage" element={<ProtectedRoute><NominationList /></ProtectedRoute>} />
+              <Route path="/user/claim" element={<ProtectedRoute><ReportClaim /></ProtectedRoute>} />
+
+              {/* NEW: 6-Step Wasiyyah Route */}
               <Route
-                path="/dashboard"
-                element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
-              />
-              <Route
-                path="/manage"
-                element={<ProtectedRoute><NominationList /></ProtectedRoute>}
-              />
-              <Route
-                path="/user/claim"
-                element={<ProtectedRoute><ReportClaim /></ProtectedRoute>}
+                path="/wasiyyah/create"
+                element={<ProtectedRoute><CreateWasiyyah /></ProtectedRoute>}
               />
 
               {/* Admin Routes */}
-              <Route
-                path="/admin/claims"
-                element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>}
-              />
-              <Route
-                path="/admin/approvals"
-                element={<AdminRoute><AdminApprovals /></AdminRoute>}
-              />
+              <Route path="/admin/claims" element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>} />
+              <Route path="/admin/approvals" element={<AdminRoute><AdminApprovals /></AdminRoute>} />
 
-              {/* Default Catch-All */}
               <Route path="*" element={<RootRoute />} />
             </Routes>
           </main>

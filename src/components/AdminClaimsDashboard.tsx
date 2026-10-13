@@ -130,7 +130,7 @@ export default function AdminClaimsDashboard() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-2 w-full md:w-auto">
+                                <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
                                     <Button variant="outline" className="w-full md:w-auto text-muted-foreground hover:text-destructive hover:bg-destructive/10">
                                         <XCircle className="w-4 h-4 mr-2" /> Reject
                                     </Button>
