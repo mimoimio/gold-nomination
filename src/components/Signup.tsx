@@ -41,8 +41,8 @@ export default function Signup() {
             // 1. Create the user in PocketBase
             const userData = {
                 ...formData,
-                role: 'investor', // Force the role so they can't make themselves an admin
-                total_gold_balance: 0, // New users start with 0g
+                role: 'pewasiat', // Enforce correct role
+                total_gold_balance: 0,
                 emailVisibility: true,
             };
 
@@ -71,7 +71,7 @@ export default function Signup() {
                     </div>
                     <CardTitle className="text-2xl font-bold">Create an Account</CardTitle>
                     <CardDescription>
-                        Register as an investor to start managing your digital gold and succession planning.
+                        Register as a Pewasiat to start managing your digital gold and succession planning.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

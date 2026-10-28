@@ -17,7 +17,8 @@ export default function Step4Waris({ data, setFormData }: Props) {
     const addWaris = () => {
         setFormData({
             ...data,
-            waris_list: [...data.waris_list, { name: '', nric: '', relationship: '', address: '' }]
+            // Added email and phone to initialization[cite: 2]
+            waris_list: [...data.waris_list, { name: '', nric: '', relationship: '', address: '', email: '', phone: '' }]
         });
     };
 
@@ -130,7 +131,18 @@ export default function Step4Waris({ data, setFormData }: Props) {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                                {/* New Phone Field */}
                                 <div className="space-y-2">
+                                    <Label>No. Telefon Semasa</Label>
+                                    <Input type="tel" value={waris.phone} onChange={(e) => updateWaris(index, 'phone', e.target.value)} placeholder="Contoh: 012-3456789" />
+                                </div>
+                                {/* New Email Field (Spans full width on small screens, half on md) */}
+                                <div className="space-y-2">
+                                    <Label>Alamat Emel</Label>
+                                    <Input type="email" value={waris.email} onChange={(e) => updateWaris(index, 'email', e.target.value)} placeholder="emel.waris@gmail.com" />
+                                </div>
+                                {/* Address Field (Spans full width) */}
+                                <div className="space-y-2 md:col-span-2">
                                     <Label>Alamat Surat-Menyurat</Label>
                                     <Input value={waris.address} onChange={(e) => updateWaris(index, 'address', e.target.value)} placeholder="Alamat Penuh" />
                                 </div>

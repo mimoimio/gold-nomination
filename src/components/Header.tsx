@@ -13,7 +13,7 @@ import { LogOut, User, Coins, Menu } from "lucide-react";
 import { ModeToggle } from './mode-toggle';
 
 export default function Header() {
-    const { user, isValid } = useAuth();
+    const { user, isValid, isAdmin, isPewasiat, isWasi } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -40,19 +40,30 @@ export default function Header() {
             }`;
     };
 
-    // The Navigation Links Payload (separated to avoid duplicating code)
+    // The Navigation Links Payload
     const renderNavLinks = (isMobile = false) => {
-        if (!isValid || !user) return null;
-
         const linkClass = isMobile ? getMobileLinkStyle : getLinkStyle;
         const closeMenu = () => isMobile && setIsMobileOpen(false);
+        console.log('is pewasiat', isPewasiat)
 
-        if (user.role === 'admin') {
+        // 1. Unauthenticated (Public / Waris) Links
+        if (!isValid || !user) {
             return (
                 <>
-                    <Link to="/admin/approvals" className={linkClass('/admin/approvals')} onClick={closeMenu}>
-                        KYC Approvals
+                    <Link to="/report-demise" className={linkClass('/report-demise')} onClick={closeMenu}>
+                        Report Demise
                     </Link>
+                    <Link to="/login" className={linkClass('/login')} onClick={closeMenu}>
+                        Login
+                    </Link>
+                </>
+            );
+        }
+
+        // 2. Admin Links
+        if (isAdmin) {
+            return (
+                <>
                     <Link to="/admin/claims" className={linkClass('/admin/claims')} onClick={closeMenu}>
                         Death Claims
                     </Link>
@@ -60,22 +71,35 @@ export default function Header() {
             );
         }
 
-        return (
-            <>
-                <Link to="/dashboard" className={linkClass('/dashboard')} onClick={closeMenu}>
-                    Overview
-                </Link>
-                <Link to="/manage" className={linkClass('/manage')} onClick={closeMenu}>
-                    Manage Beneficiaries
-                </Link>
-                <Link to="/user/claim" className={linkClass('/user/claim')} onClick={closeMenu}>
-                    Report Demise
-                </Link>
-                <Link to="/wasiyyah/create" className={linkClass('/wasiyyah/create')} onClick={closeMenu}>
-                    Create Wasiyyah
-                </Link>
-            </>
-        );
+        // 3. Wasi (Administrator) Links
+        if (isWasi) {
+            return (
+                <>
+                    <Link to="/dashboard" className={linkClass('/dashboard')} onClick={closeMenu}>
+                        Wasi Dashboard
+                    </Link>
+                    <Link to="/wasi/claim-assets" className={linkClass('/wasi/claim-assets')} onClick={closeMenu}>
+                        Execute Asset Claim
+                    </Link>
+                </>
+            );
+        }
+
+        // 4. Pewasiat (Testator / Default User) Links
+        if (isPewasiat) {
+            return (
+                <>
+                    <Link to="/dashboard" className={linkClass('/dashboard')} onClick={closeMenu}>
+                        Overview
+                    </Link>
+                    <Link to="/wasiyyah/create" className={linkClass('/wasiyyah/create')} onClick={closeMenu}>
+                        Create Wasiemas
+                    </Link>
+                </>
+            );
+        }
+
+        return null;
     };
 
     return (
@@ -83,30 +107,28 @@ export default function Header() {
             <div className="max-w-5xl mx-auto flex h-16 items-center justify-between px-4 md:px-6">
 
                 <div className="flex items-center gap-3">
-                    {/* Mobile Hamburger Menu (Hidden on md and larger) */}
-                    {isValid && user && (
-                        <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="md:hidden -ml-2">
-                                    <Menu className="h-6 w-6" />
-                                    <span className="sr-only">Toggle navigation menu</span>
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="left" className="w-70 sm:w-[320px]">
-                                <SheetHeader className="text-left mb-6">
-                                    <SheetTitle className="flex items-center gap-2">
-                                        <div className="bg-yellow-600 p-1.5 rounded-lg">
-                                            <Coins className="h-4 w-4 text-white" />
-                                        </div>
-                                        <span>Nomination Portal</span>
-                                    </SheetTitle>
-                                </SheetHeader>
-                                <nav className="flex flex-col space-y-1 mt-4">
-                                    {renderNavLinks(true)}
-                                </nav>
-                            </SheetContent>
-                        </Sheet>
-                    )}
+                    {/* Mobile Hamburger Menu */}
+                    <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon" className="md:hidden -ml-2">
+                                <Menu className="h-6 w-6" />
+                                <span className="sr-only">Toggle navigation menu</span>
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="w-70 sm:w-[320px]">
+                            <SheetHeader className="text-left mb-6">
+                                <SheetTitle className="flex items-center gap-2">
+                                    <div className="bg-yellow-600 p-1.5 rounded-lg">
+                                        <Coins className="h-4 w-4 text-white" />
+                                    </div>
+                                    <span>Nomination Portal</span>
+                                </SheetTitle>
+                            </SheetHeader>
+                            <nav className="flex flex-col space-y-1 mt-4">
+                                {renderNavLinks(true)}
+                            </nav>
+                        </SheetContent>
+                    </Sheet>
 
                     {/* Branding */}
                     <Link to="/" className="flex items-center gap-2">
@@ -119,12 +141,12 @@ export default function Header() {
                     </Link>
                 </div>
 
-                {/* Desktop Navigation (Hidden on small screens) */}
+                {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center gap-6">
                     {renderNavLinks(false)}
                 </nav>
 
-                {/* User Profile Menu (Stays on the right for both mobile and desktop) */}
+                {/* User Profile Menu OR Public Mode Toggle */}
                 <div className="flex items-center gap-4">
                     <ModeToggle />
                     {isValid && user && (

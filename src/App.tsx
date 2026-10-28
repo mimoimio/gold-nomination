@@ -2,38 +2,34 @@
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
-import NominationList from './components/NominationLists';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import { useEffect, type JSX } from 'react';
 import './App.css';
 import AdminClaimsDashboard from './components/AdminClaimsDashboard';
-import pb from './lib/pocketbase';
 import ReportClaim from './components/ReportClaim';
-import AdminApprovals from './components/AdminApprovals';
 import Signup from './components/Signup';
-
-// NEW IMPORT
 import CreateWasiyyah from './components/CreateWasiyyah';
+import pb from './lib/pocketbase';
+import WasiClaimAssets from './components/WasiClaimAssets';
 
-// ... (Your wrappers remain exactly the same)
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { isValid, user } = useAuth();
+  const { isValid, isAdmin } = useAuth();
   if (!isValid) return <Navigate to="/login" replace />;
-  if (user?.role === 'admin') return <Navigate to="/admin/claims" replace />;
+  if (isAdmin) return <Navigate to="/admin/claims" replace />;
   return children;
 };
 
 const AdminRoute = ({ children }: { children: JSX.Element }) => {
-  const { user, isValid } = useAuth();
-  if (!isValid || user?.role !== 'admin') return <Navigate to="/dashboard" replace />;
+  const { isValid, isAdmin } = useAuth();
+  if (!isValid || !isAdmin) return <Navigate to="/dashboard" replace />;
   return children;
 };
 
 const RootRoute = () => {
-  const { isValid, user } = useAuth();
+  const { isValid, isAdmin } = useAuth();
   if (!isValid) return <Navigate to="/login" replace />;
-  if (user?.role === 'admin') return <Navigate to="/admin/claims" replace />;
+  if (isAdmin) return <Navigate to="/admin/claims" replace />;
   return <Navigate to="/dashboard" replace />;
 };
 
@@ -54,24 +50,21 @@ function App() {
           <Header />
           <main className="flex-1">
             <Routes>
+              {/* // Inside your App.tsx <Routes> block: */}
+
+              {/* Public Routes */}
               <Route path="/" element={<RootRoute />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/report-demise" element={<ReportClaim />} /> {/* Moved to Public */}
 
-              {/* Investor Routes */}
+              {/* User / Pewasiat Routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/manage" element={<ProtectedRoute><NominationList /></ProtectedRoute>} />
-              <Route path="/user/claim" element={<ProtectedRoute><ReportClaim /></ProtectedRoute>} />
-
-              {/* NEW: 6-Step Wasiyyah Route */}
-              <Route
-                path="/wasiyyah/create"
-                element={<ProtectedRoute><CreateWasiyyah /></ProtectedRoute>}
-              />
+              <Route path="/wasiyyah/create" element={<ProtectedRoute><CreateWasiyyah /></ProtectedRoute>} />
+              <Route path="/wasi/claim-assets" element={<ProtectedRoute><WasiClaimAssets /></ProtectedRoute>} />
 
               {/* Admin Routes */}
               <Route path="/admin/claims" element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>} />
-              <Route path="/admin/approvals" element={<AdminRoute><AdminApprovals /></AdminRoute>} />
 
               <Route path="*" element={<RootRoute />} />
             </Routes>
