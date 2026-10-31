@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, CheckCircle, FileSearch, Send, AlertTriangle } from "lucide-react";
 import type { DemiseReportRecord, WasiClaimRecord } from '@/types/database';
+import { emailService } from '@/lib/emailService';
 
 export default function AdminClaimsDashboard() {
     const [demiseReports, setDemiseReports] = useState<DemiseReportRecord[]>([]);
@@ -65,17 +66,31 @@ export default function AdminClaimsDashboard() {
     };
 
     const handleReleaseAndNotify = async (claimId: string) => {
-        if (!confirm("WARNING: This will release the assets to the Wasi and auto-notify all Waris via email/SMS. Proceed?")) return;
+        if (!confirm("WARNING: This will release the assets to the Wasi and auto-notify all Waris via email. Proceed?")) return;
         try {
             await pb.collection('wasi_claims').update(claimId, { status: 'Approved & Released' });
+
+            const claim = wasiClaims.find(c => c.id === claimId);
+            if (claim && claim.expand?.wasi_id) {
+                const wasi = claim.expand.wasi_id;
+
+                // For the prototype, we use dummy Waris data. In production, you would fetch this from the wasiyyah_data JSON.
+                const dummyWarisList = [
+                    { name: "Waris 1", email: "waris1@example.com", phone: "012-1111111" },
+                    { name: "Waris 2", email: "waris2@example.com", phone: "012-2222222" }
+                ];
+
+                // Trigger the automated emails to the Waris
+                await emailService.sendWarisNotifications(dummyWarisList, wasi, "Ahmad Zaha (Demo)");
+            }
+
             setWasiClaims(wasiClaims.filter(c => c.id !== claimId));
             alert("Success! Assets released to Wasi. Notification dispatch triggered to all Faraid Waris.");
         } catch (error) {
-            alert("Release & Notification simulated for demo.");
+            alert("Release & Notification simulated for demo. Check console for email logs.");
             setWasiClaims(wasiClaims.filter(c => c.id !== claimId));
         }
     };
-
     if (isLoading) return <div className="p-8 text-center">Loading Admin Data...</div>;
 
     return (
@@ -129,24 +144,27 @@ export default function AdminClaimsDashboard() {
                 </CardContent>
             </Card>
 
-            {/* STEP 2: RELEASE & NOTIFY */}
+            {/* STEP 2: ON-SITE PHYSICAL VERIFICATION & RELEASE */}
             <Card className="border-primary/20 shadow-sm ring-1 ring-primary/10">
                 <CardHeader className="bg-primary/5 border-b border-primary/10 pb-4">
                     <CardTitle className="flex items-center gap-2 text-lg text-primary">
                         <CheckCircle className="w-5 h-5" />
-                        Step 2: Authenticated Wasi Claims
+                        Step 2: On-Site Physical Verification & Asset Release
                     </CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Wasi must be physically present at KAB Gold HQ. Verify their physical NRIC before releasing assets.
+                    </p>
                 </CardHeader>
                 <CardContent className="p-0">
                     {wasiClaims.length === 0 ? (
-                        <div className="p-8 text-center text-muted-foreground">No pending Wasi claims ready for release.</div>
+                        <div className="p-8 text-center text-muted-foreground">No pending Wasi claims ready for physical release.</div>
                     ) : (
                         <table className="w-full text-sm text-left">
                             <thead className="bg-primary/5 text-muted-foreground border-b border-primary/10">
                                 <tr>
                                     <th className="p-4">Claim ID</th>
                                     <th className="p-4">Authorized Wasi</th>
-                                    <th className="p-4">Wasiemas Reference</th>
+                                    <th className="p-4">Verification Requirement</th>
                                     <th className="p-4 text-right">Execution Action</th>
                                 </tr>
                             </thead>
@@ -159,8 +177,8 @@ export default function AdminClaimsDashboard() {
                                             <span className="text-xs font-normal text-muted-foreground">IC: {claim.expand?.wasi_id?.nric_number}</span>
                                         </td>
                                         <td className="p-4">
-                                            <Badge variant="outline" className="border-primary text-primary">
-                                                {claim.wasiemas_id}
+                                            <Badge variant="destructive" className="animate-pulse">
+                                                Verify Physical IC On-Site
                                             </Badge>
                                         </td>
                                         <td className="p-4 text-right">
@@ -169,7 +187,7 @@ export default function AdminClaimsDashboard() {
                                                 onClick={() => handleReleaseAndNotify(claim.id)}
                                                 className="gap-2 bg-primary hover:bg-primary/90"
                                             >
-                                                <Send className="w-4 h-4" /> Release & Auto-Notify Waris
+                                                <Send className="w-4 h-4" /> Verify IC & Release Assets
                                             </Button>
                                         </td>
                                     </tr>
@@ -179,7 +197,6 @@ export default function AdminClaimsDashboard() {
                     )}
                 </CardContent>
             </Card>
-
         </div>
     );
 }

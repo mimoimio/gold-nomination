@@ -67,6 +67,12 @@ export default function Header() {
                     <Link to="/admin/claims" className={linkClass('/admin/claims')} onClick={closeMenu}>
                         Death Claims
                     </Link>
+                    <Link to="/admin/legal-verification" className={linkClass('/admin/legal-verification')} onClick={closeMenu}>
+                        Legal Verification
+                    </Link>
+                    <Link to="/admin/fee-reporting" className={linkClass('/admin/fee-reporting')} onClick={closeMenu}>
+                        Fee Deductions
+                    </Link>
                 </>
             );
         }

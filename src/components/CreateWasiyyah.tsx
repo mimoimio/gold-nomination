@@ -61,7 +61,7 @@ export default function CreateWasiyyah() {
                 {step === 4 && <Step4Waris data={formData} setFormData={setFormData} />}
                 {step === 5 && <Step5Tugasan data={formData} setFormData={setFormData} />}
                 {step === 6 && <Step6Saksi data={formData} setFormData={setFormData} />}
-                {step === 7 && <Step7Finale />}
+                {step === 7 && <Step7Finale formData={formData} />}
             </div>
 
             {/* Navigation Buttons */}

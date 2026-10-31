@@ -12,6 +12,8 @@ import Signup from './components/Signup';
 import CreateWasiyyah from './components/CreateWasiyyah';
 import pb from './lib/pocketbase';
 import WasiClaimAssets from './components/WasiClaimAssets';
+import LegalFirmDashboard from './components/LegalFirmDashboard';
+import AdminFeeReporting from './components/AdminFeeReporting';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isValid, isAdmin } = useAuth();
@@ -65,6 +67,8 @@ function App() {
 
               {/* Admin Routes */}
               <Route path="/admin/claims" element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>} />
+              <Route path="/admin/legal-verification" element={<AdminRoute><LegalFirmDashboard /></AdminRoute>} />
+              <Route path="/admin/fee-reporting" element={<AdminRoute><AdminFeeReporting /></AdminRoute>} />
 
               <Route path="*" element={<RootRoute />} />
             </Routes>
