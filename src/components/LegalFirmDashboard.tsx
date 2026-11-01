@@ -1,5 +1,5 @@
 // src/components/LegalFirmDashboard.tsx
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import pb from '../lib/pocketbase';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ export default function LegalFirmDashboard() {
     const [pendingDocuments, setPendingDocuments] = useState<WasiemasRecord[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [processingId, setProcessingId] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    // const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         fetchPendingDocuments();
