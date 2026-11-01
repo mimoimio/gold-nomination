@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Button } from "@/components/ui/button";
 import { Printer, UploadCloud, CheckCircle2, FileText, Loader2 } from "lucide-react";
 import type { WasiyyahState } from '../../types/wasiyyah';
+import { buildWasiyyahPdf } from '../../lib/wasiyyahPdf';
 
 interface Step7Props {
     formData: WasiyyahState;
@@ -20,23 +21,33 @@ export default function Step7Finale({ formData }: Step7Props) {
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    // ACTION 1: Generate & Print the PDF
-    const handleGeneratePDF = async () => {
+    const handleGeneratePDF = () => {
         setIsGenerating(true);
-        try {
-            // Note: In a full production environment, this would call an API or use a library like jspdf
-            // to dynamically render the formData into a legal PDF template. 
-            // For this frontend prototype, we will trigger a browser print of the data.
-            console.log("Generating Wasiemas Document with data:", formData);
+        const printWindow = window.open('', '_blank');
 
-            // Temporary visual feedback for the demo
-            setTimeout(() => {
-                alert("PDF Generated. Please print, sign with 2 witnesses, and upload it in Step 2.");
-                window.print();
-                setIsGenerating(false);
-            }, 1000);
+        try {
+            const doc = buildWasiyyahPdf(formData, {
+                full_name: user?.full_name,
+                nric_number: user?.nric_number,
+                email: user?.email,
+            });
+
+            doc.save(`Wasiyyah_${user?.nric_number?.trim() || 'Draf'}_${new Date().toISOString().slice(0, 10)}.pdf`);
+
+            const blobUrl = URL.createObjectURL(doc.output('blob'));
+            if (printWindow) {
+                printWindow.location.href = blobUrl;
+            } else {
+                window.open(blobUrl, '_blank');
+            }
+            window.setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+
+            alert("PDF Wasiyyah telah dijana dan dimuat turun. Sila cetak, tandatangan di hadapan saksi, kemudian muat naik di Langkah 2.");
         } catch (error) {
-            console.error("PDF Generation failed", error);
+            printWindow?.close();
+            console.error("PDF generation failed", error);
+            alert("Gagal menjana PDF Wasiyyah. Sila cuba lagi.");
+        } finally {
             setIsGenerating(false);
         }
     };
@@ -81,7 +92,7 @@ export default function Step7Finale({ formData }: Step7Props) {
             alert("Wasiemas successfully submitted! The Legal Firm will verify the document.");
             navigate('/dashboard');
 
-        } catch (error: any) {
+        } catch (error) {
             console.error("Submission failed:", error);
             alert("Failed to submit to PocketBase. Ensure the 'wasiemas' collection exists and API rules allow creation.");
         } finally {
