@@ -3,10 +3,25 @@ import { jsPDF } from 'jspdf';
 
 const url = process.env.PB_URL || 'http://127.0.0.1:8090';
 const email = process.env.PB_SUPERUSER_EMAIL || 'admin@wasiemas.test';
-const password = process.env.PB_SUPERUSER_PASSWORD || 'SuperDemo123!';
+const password = process.env.PB_SUPERUSER_PASSWORD;
+if (!password) throw new Error('Set PB_SUPERUSER_PASSWORD before running the seed script.');
 
 const pb = new PocketBase(url);
 await pb.collection('_superusers').authWithPassword(email, password);
+
+if (process.env.RESET_ALL === 'true') {
+    for (const collection of ['wasi_claims', 'demise_reports', 'wasiemas']) {
+        const records = await pb.collection(collection).getFullList();
+        for (const record of records) {
+            await pb.collection(collection).delete(record.id);
+        }
+    }
+    const allUsers = await pb.collection('users').getFullList();
+    for (const user of allUsers) {
+        await pb.collection('users').delete(user.id);
+    }
+    console.log('Reset all application records and users.');
+}
 
 const accounts = {
     pewasiatA: {
@@ -40,8 +55,8 @@ const accounts = {
         address: 'No. 3, Jalan Demo, 50000 Kuala Lumpur',
     },
     admin: {
-        email: 'admin@wasiemas.test',
-        password: 'SuperDemo123!',
+        email: 'admin.kab@wasiemas.test',
+        password: 'AdminDemo123!',
         full_name: 'KAB Gold Admin',
         nric_number: '800101-10-1111',
         role: 'admin',

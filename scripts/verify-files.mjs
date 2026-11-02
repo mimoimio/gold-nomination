@@ -1,7 +1,7 @@
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
-await pb.collection('users').authWithPassword('admin@wasiemas.test', 'SuperDemo123!');
+const pb = new PocketBase(process.env.PB_URL || 'http://127.0.0.1:8090');
+await pb.collection('users').authWithPassword('admin.kab@wasiemas.test', 'AdminDemo123!');
 const token = await pb.files.getToken();
 
 const report = await pb.collection('demise_reports').getFirstListItem("status = 'Pending Verification'");

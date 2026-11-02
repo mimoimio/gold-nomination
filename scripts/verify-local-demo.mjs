@@ -1,17 +1,14 @@
 import PocketBase from 'pocketbase';
 
 const url = process.env.PB_URL || 'http://127.0.0.1:8090';
-const superuser = new PocketBase(url);
-await superuser.collection('_superusers').authWithPassword('admin@wasiemas.test', 'SuperDemo123!');
+const admin = new PocketBase(url);
+await admin.collection('users').authWithPassword('admin.kab@wasiemas.test', 'AdminDemo123!');
+console.log('admin role:', admin.authStore.record?.role);
 
 for (const collection of ['users', 'wasiemas', 'wasi_claims', 'demise_reports']) {
-    const records = await superuser.collection(collection).getFullList();
+    const records = await admin.collection(collection).getFullList();
     console.log(`${collection}: ${records.length}`);
 }
-
-const admin = new PocketBase(url);
-await admin.collection('users').authWithPassword('admin@wasiemas.test', 'SuperDemo123!');
-console.log('admin role:', admin.authStore.record?.role);
 
 const checks = [
     ['pending death reports', 'demise_reports', 'status = "Pending Verification"'],
