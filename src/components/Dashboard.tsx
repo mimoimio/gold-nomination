@@ -53,7 +53,7 @@ export default function Dashboard() {
                         variant="outline"
                         className="w-full hover:bg-destructive/10 hover:text-destructive hover:border-destructive"
                         size="lg"
-                        onClick={() => navigate('/user/claim')}
+                        onClick={() => navigate('/report-demise')}
                     >
                         Lapor Kematian
                     </Button>

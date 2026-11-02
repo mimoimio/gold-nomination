@@ -55,7 +55,7 @@ export default function Step1Pewasiat({ data, setFormData }: Props) {
                 <Label className="text-base font-semibold text-foreground">Cara Pelepasan Aset</Label>
                 <RadioGroup
                     value={data.pewasiat.release_type}
-                    onValueChange={(v: "Wasi Emas" | "Hibah Emas" | "Waqf") => setFormData({
+                    onValueChange={(v: "Wasi Emas") => setFormData({
                         ...data,
                         pewasiat: {
                             ...data.pewasiat,
@@ -73,21 +73,21 @@ export default function Step1Pewasiat({ data, setFormData }: Props) {
                         </Label>
                     </div>
                     {/* Hibah Emas Card */}
-                    <div>
+                    {/* <div>
                         <RadioGroupItem value="Hibah Emas" id="Hibah Emas" className="peer sr-only" />
                         <Label htmlFor="Hibah Emas" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
                             <Gift className="mb-3 h-6 w-6" />
                             <span className="font-bold">Hibah Emas</span>
                         </Label>
-                    </div>
+                    </div> */}
                     {/* Waqf Card */}
-                    <div>
+                    {/* <div>
                         <RadioGroupItem value="Waqf" id="waqf" className="peer sr-only" />
                         <Label htmlFor="waqf" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
                             <Building className="mb-3 h-6 w-6" />
                             <span className="font-bold">Waqf</span>
                         </Label>
-                    </div>
+                    </div> */}
                 </RadioGroup>
             </div>
 
@@ -117,6 +117,6 @@ export default function Step1Pewasiat({ data, setFormData }: Props) {
             </div>
 
             <ConsentFooter />
-        </div>
+        </div >
     );
 }
