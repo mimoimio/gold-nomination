@@ -53,10 +53,13 @@ export default function Signup() {
 
             // 3. Redirect to their new dashboard
             navigate('/dashboard');
-        } catch (err: any) {
-            console.error("Signup failed:", err);
-            console.error("Details", err.response);
-            setError(err.response?.data?.password?.message || "Failed to create account. Email or NRIC may already be in use.");
+        } catch (error) {
+            console.error("Signup failed:", error);
+            const pbError = error as { response?: { data?: { password?: { message?: string } } } };
+            setError(
+                pbError.response?.data?.password?.message ||
+                    "Gagal mencipta akaun. Emel atau NRIC mungkin telah digunakan."
+            );
         } finally {
             setIsLoading(false);
         }
@@ -69,15 +72,15 @@ export default function Signup() {
                     <div className="bg-yellow-600 p-3 rounded-xl inline-block mb-2">
                         <Coins className="h-8 w-8 text-white" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">Create an Account</CardTitle>
+                    <CardTitle className="text-2xl font-bold">Cipta Akaun</CardTitle>
                     <CardDescription>
-                        Register as a Pewasiat to start managing your digital gold and succession planning.
+                        Daftar sebagai Pewasiat untuk mula mengurus aset emas dan perancangan pewarisan anda.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSignup} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="full_name">Full Name (As per IC)</Label>
+                            <Label htmlFor="full_name">Nama Penuh (Mengikut Kad Pengenalan)</Label>
                             <Input
                                 id="full_name"
                                 required
@@ -88,7 +91,7 @@ export default function Signup() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="nric_number">NRIC Number</Label>
+                            <Label htmlFor="nric_number">No. Kad Pengenalan</Label>
                             <Input
                                 id="nric_number"
                                 required
@@ -99,7 +102,7 @@ export default function Signup() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email Address</Label>
+                            <Label htmlFor="email">Alamat Emel</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -112,7 +115,7 @@ export default function Signup() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Kata Laluan</Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -122,7 +125,7 @@ export default function Signup() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="passwordConfirm">Confirm Password</Label>
+                                <Label htmlFor="passwordConfirm">Sahkan Kata Laluan</Label>
                                 <Input
                                     id="passwordConfirm"
                                     type="password"
@@ -142,15 +145,15 @@ export default function Signup() {
                         <Button type="submit" className="w-full bg-yellow-600 hover:bg-yellow-700" disabled={isLoading}>
                             {isLoading ? (
                                 <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating Account...
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Mencipta Akaun...
                                 </>
-                            ) : "Sign Up"}
+                            ) : "Daftar"}
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center border-t p-4 mt-2">
                     <p className="text-sm text-muted-foreground">
-                        Already have an account? <Link to="/login" className="text-yellow-600 font-semibold hover:underline">Log in</Link>
+                        Sudah ada akaun? <Link to="/login" className="text-yellow-600 font-semibold hover:underline">Log masuk</Link>
                     </p>
                 </CardFooter>
             </Card>

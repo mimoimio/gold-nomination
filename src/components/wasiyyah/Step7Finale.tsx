@@ -11,7 +11,8 @@ import { buildWasiyyahPdf } from '../../lib/wasiyyahPdf';
 interface Step7Props {
     formData: WasiyyahState;
 }
-
+// bug: click print button immediately show pdf,
+// the alert confirmation also download separately and opens the pdf
 export default function Step7Finale({ formData }: Step7Props) {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -82,19 +83,21 @@ export default function Step7Finale({ formData }: Step7Props) {
             // Package the data and the physical file using FormData for PocketBase
             const pbFormData = new FormData();
             pbFormData.append('pewasiat_id', user.id);
+            pbFormData.append('pewasiat_nric', user.nric_number);
             pbFormData.append('wasiyyah_data', JSON.stringify(formData));
             pbFormData.append('status', 'Pending Verification');
+            pbFormData.append('fee_deducted', 'false');
             pbFormData.append('signed_document_pdf', selectedFile);
 
             console.log("Submitting to PocketBase 'wasiemas' collection...");
             await pb.collection('wasiemas').create(pbFormData);
 
-            alert("Wasiemas successfully submitted! The Legal Firm will verify the document.");
+            alert("Wasi Emas berjaya dihantar! Firma guaman akan mengesahkan dokumen.");
             navigate('/dashboard');
 
         } catch (error) {
             console.error("Submission failed:", error);
-            alert("Failed to submit to PocketBase. Ensure the 'wasiemas' collection exists and API rules allow creation.");
+            alert("Gagal menghantar Wasi Emas. Sila semak sambungan PocketBase dan peraturan akses.");
         } finally {
             setIsUploading(false);
         }
@@ -130,7 +133,7 @@ export default function Step7Finale({ formData }: Step7Props) {
                         disabled={isGenerating || isUploading}
                     >
                         {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <FileText className="mr-2 h-5 w-5" />}
-                        {isGenerating ? "Menjana PDF..." : "Jana & Cetak Wasiyyah"}
+                        {isGenerating ? "Menjana PDF..." : "Jana & Cetak Wasi Emas"}
                     </Button>
                 </div>
 
@@ -168,7 +171,7 @@ export default function Step7Finale({ formData }: Step7Props) {
                         disabled={!selectedFile || isUploading || isGenerating}
                     >
                         {isUploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <CheckCircle2 className="mr-2 h-5 w-5" />}
-                        {isUploading ? "Memuat Naik..." : "Hantar Wasiemas"}
+                        {isUploading ? "Memuat Naik..." : "Hantar Wasi Emas"}
                     </Button>
                 </div>
             </div>

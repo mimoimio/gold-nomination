@@ -29,11 +29,9 @@ export default function Login() {
             // If successful, redirect the user to the main dashboard
             navigate('/dashboard');
 
-        } catch (err: any) {
-            console.log("Is Aborted?:", err.isAbort); // Checks for auto-cancellation
-            console.log("Original Error:", err.originalError); // Reveals network/system error
-            console.error("Login failed:", err);
-            setError('Invalid email or password. Please try again.');
+        } catch (error) {
+            console.error("Login failed:", error);
+            setError('Emel atau kata laluan tidak sah. Sila cuba lagi.');
         } finally {
             setIsLoading(false);
         }
@@ -46,16 +44,16 @@ export default function Login() {
                     <div className="bg-yellow-600 p-3 rounded-xl inline-block mb-2">
                         <Coins className="h-8 w-8 text-white" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">Sign in to your account</CardTitle>
+                    <CardTitle className="text-2xl font-bold">Log Masuk Akaun</CardTitle>
                     <CardDescription>
-                        Gold Trading Nomination Portal
+                        Portal Wasi Emas KAB Gold
                     </CardDescription>
                 </CardHeader>
 
                 <CardContent>
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2 text-left">
-                            <Label htmlFor="email">Email Address</Label>
+                            <Label htmlFor="email">Alamat Emel</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -67,7 +65,7 @@ export default function Login() {
                         </div>
 
                         <div className="space-y-2 text-left">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Kata Laluan</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -87,16 +85,16 @@ export default function Login() {
                         <Button type="submit" className="w-full bg-yellow-600 hover:bg-yellow-700" disabled={isLoading}>
                             {isLoading ? (
                                 <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sedang log masuk...
                                 </>
-                            ) : "Sign in"}
+                            ) : "Log Masuk"}
                         </Button>
                     </form>
                 </CardContent>
 
                 <CardFooter className="flex justify-center border-t p-4 mt-2">
                     <p className="text-sm text-muted-foreground">
-                        Don't have an account? <Link to="/signup" className="text-yellow-600 font-semibold hover:underline">Sign up</Link>
+                        Belum ada akaun? <Link to="/signup" className="text-yellow-600 font-semibold hover:underline">Daftar</Link>
                     </p>
                 </CardFooter>
             </Card>

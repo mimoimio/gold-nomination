@@ -77,6 +77,10 @@ export default function Step2Wasi({ data, setFormData }: Props) {
                                 <Input value={wasi.phone} onChange={(e) => updateWasi(index, 'phone', e.target.value)} placeholder="e.g. 012-3456789" />
                             </div>
                             <div className="space-y-2">
+                                <Label>Alamat Emel</Label>
+                                <Input type="email" value={wasi.email} onChange={(e) => updateWasi(index, 'email', e.target.value)} placeholder="emel.wasi@example.com" />
+                            </div>
+                            <div className="space-y-2">
                                 <Label>Hubungan bersama Pewasiat</Label>
                                 <Select value={wasi.relationship} onValueChange={(val) => updateWasi(index, 'relationship', val)}>
                                     <SelectTrigger>

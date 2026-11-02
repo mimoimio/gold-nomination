@@ -1,6 +1,5 @@
 // src/components/CreateWasiyyah.tsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 1. Import useNavigate
 import type { WasiyyahState } from '../types/wasiyyah';
 import { Button } from "@/components/ui/button";
 import Step1Pewasiat from './wasiyyah/Step1Pewasiat';
@@ -12,7 +11,6 @@ import Step6Saksi from './wasiyyah/Step6Saksi';
 import Step7Finale from './wasiyyah/Step7Finale';
 
 export default function CreateWasiyyah() {
-    const navigate = useNavigate(); // 2. Initialize navigate
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState<WasiyyahState>({
         pewasiat: { release_type: '', use_yusuf_advisory: false },
@@ -24,16 +22,8 @@ export default function CreateWasiyyah() {
         saksi_list: [{ name: '', nric: '', address: '' }, { name: '', nric: '', address: '' }]
     });
 
-    // 3. Updated Next/Submit Logic
     const handleNext = () => {
-        if (step === 7) {
-            // For the 3:00 PM Prototype Demo: Log the data and redirect
-            console.log("SUCCESS! Payload ready for PocketBase:", formData);
-            alert("Selesai! Dokumen sedia untuk disemak oleh Admin.");
-            navigate('/dashboard');
-        } else {
-            setStep((prev) => prev + 1);
-        }
+        setStep((prev) => Math.min(prev + 1, 7));
     };
 
     const prevStep = () => setStep((prev) => prev - 1);
@@ -41,7 +31,7 @@ export default function CreateWasiyyah() {
     return (
         <div className="max-w-3xl mx-auto p-4 md:p-8">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold mb-2 text-foreground">Borang Pendaftaran Wasiyyah</h1>
+                <h1 className="text-2xl font-bold mb-2 text-foreground">Borang Pendaftaran Wasi Emas</h1>
 
                 {/* Progress Bar */}
                 <div className="w-full bg-secondary rounded-full h-2.5">
@@ -74,10 +64,7 @@ export default function CreateWasiyyah() {
                     Kembali
                 </Button>
 
-                {/* 4. Use the new handleNext function */}
-                <Button onClick={handleNext}>
-                    {step === 7 ? 'Selesai & Hantar' : 'Seterusnya'}
-                </Button>
+                {step < 7 && <Button onClick={handleNext}>Seterusnya</Button>}
             </div>
         </div>
     );

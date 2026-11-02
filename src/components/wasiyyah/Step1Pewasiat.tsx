@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Info, Briefcase, Gift, Building, Scale, ShieldX } from "lucide-react";
+import { Info, Briefcase, Scale, ShieldX } from "lucide-react";
 
 interface Props {
     data: WasiyyahState;
@@ -62,9 +62,8 @@ export default function Step1Pewasiat({ data, setFormData }: Props) {
                             release_type: v
                         }
                     })}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                    className="grid grid-cols-1 gap-4 md:max-w-sm"
                 >
-                    {/* Wasi Emas Card */}
                     <div>
                         <RadioGroupItem value="Wasi Emas" id="Wasi Emas" className="peer sr-only" />
                         <Label htmlFor="Wasi Emas" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
@@ -72,22 +71,6 @@ export default function Step1Pewasiat({ data, setFormData }: Props) {
                             <span className="font-bold">Wasi Emas</span>
                         </Label>
                     </div>
-                    {/* Hibah Emas Card */}
-                    {/* <div>
-                        <RadioGroupItem value="Hibah Emas" id="Hibah Emas" className="peer sr-only" />
-                        <Label htmlFor="Hibah Emas" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
-                            <Gift className="mb-3 h-6 w-6" />
-                            <span className="font-bold">Hibah Emas</span>
-                        </Label>
-                    </div> */}
-                    {/* Waqf Card */}
-                    {/* <div>
-                        <RadioGroupItem value="Waqf" id="waqf" className="peer sr-only" />
-                        <Label htmlFor="waqf" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
-                            <Building className="mb-3 h-6 w-6" />
-                            <span className="font-bold">Waqf</span>
-                        </Label>
-                    </div> */}
                 </RadioGroup>
             </div>
 

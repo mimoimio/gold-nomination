@@ -44,7 +44,6 @@ export default function Header() {
     const renderNavLinks = (isMobile = false) => {
         const linkClass = isMobile ? getMobileLinkStyle : getLinkStyle;
         const closeMenu = () => isMobile && setIsMobileOpen(false);
-        console.log('is pewasiat', isPewasiat)
 
         // 1. Unauthenticated (Public / Waris) Links
         if (!isValid || !user) {
@@ -64,14 +63,23 @@ export default function Header() {
         if (isAdmin) {
             return (
                 <>
+                    <Link to="/admin" className={linkClass('/admin')} onClick={closeMenu}>
+                        Papan Pemuka
+                    </Link>
                     <Link to="/admin/claims" className={linkClass('/admin/claims')} onClick={closeMenu}>
-                        Death Claims
+                        Tuntutan
                     </Link>
                     <Link to="/admin/legal-verification" className={linkClass('/admin/legal-verification')} onClick={closeMenu}>
-                        Legal Verification
+                        Undang-Undang
                     </Link>
                     <Link to="/admin/fee-reporting" className={linkClass('/admin/fee-reporting')} onClick={closeMenu}>
-                        Fee Deductions
+                        Fi
+                    </Link>
+                    <Link to="/admin/reports" className={linkClass('/admin/reports')} onClick={closeMenu}>
+                        Laporan
+                    </Link>
+                    <Link to="/admin/maintenance" className={linkClass('/admin/maintenance')} onClick={closeMenu}>
+                        Rekod
                     </Link>
                 </>
             );
@@ -96,10 +104,10 @@ export default function Header() {
             return (
                 <>
                     <Link to="/dashboard" className={linkClass('/dashboard')} onClick={closeMenu}>
-                        Overview
+                        Ringkasan
                     </Link>
                     <Link to="/wasiyyah/create" className={linkClass('/wasiyyah/create')} onClick={closeMenu}>
-                        Create Wasiemas
+                        Cipta Wasi Emas
                     </Link>
                 </>
             );
@@ -127,7 +135,7 @@ export default function Header() {
                                     <div className="bg-yellow-600 p-1.5 rounded-lg">
                                         <Coins className="h-4 w-4 text-white" />
                                     </div>
-                                    <span>Nomination Portal</span>
+                                    <span>Portal Wasi Emas</span>
                                 </SheetTitle>
                             </SheetHeader>
                             <nav className="flex flex-col space-y-1 mt-4">
@@ -142,7 +150,7 @@ export default function Header() {
                             <Coins className="h-5 w-5 text-white" />
                         </div>
                         <span className="font-bold text-lg">
-                            Gold Trading <span className="text-yellow-600 hidden sm:inline-block">Nomination</span>
+                            Wasi <span className="text-yellow-600 hidden sm:inline-block">Emas</span>
                         </span>
                     </Link>
                 </div>

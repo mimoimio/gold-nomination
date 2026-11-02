@@ -382,3 +382,89 @@ I recommend doing the backend seed first, then immediately doing the admin UI wi
 2. I may briefly stop/restart the local PocketBase server.
 3. I may add `phone` and `address` fields to `users` for admin maintenance.
 4. After the backend is seeded, should I proceed directly to the admin UI fixes in the same build session?
+
+
+
+--------
+# after build response
+--------
+
+Done. Local PocketBase is seeded, the frontend now points to it, and the admin screens are wired to real local records.
+
+## Local setup
+
+- PocketBase: `http://127.0.0.1:8090` (running)
+- PocketBase dashboard: `http://127.0.0.1:8090/_/`
+- App: `http://localhost:5173`
+- Frontend uses `VITE_PB_URL` with local as the default. `.env.local` is set to local.
+- Remote pockethost was not touched.
+
+## Demo accounts
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@wasiemas.test` | `SuperDemo123!` |
+| Pewasiat A | `pewasiat.a@wasiemas.test` | `PewasiatDemo123!` |
+| Pewasiat B | `pewasiat.b@wasiemas.test` | `PewasiatDemo123!` |
+| Wasi | `wasi@wasiemas.test` | `WasiDemo123!` |
+
+`admin@wasiemas.test` also works as the PocketBase superuser.
+
+## Seeded scenario
+
+- Ahmad Zaha has a **pending Wasi Emas** waiting for legal verification.
+- Ahmad Zaha also has a **pending death report** so you can demo certificate viewing and verification.
+- Siti Aminah has an **active Wasi Emas**, a **verified death report with Wasi IC**, and a **pending Wasi claim**.
+- The active Wasi Emas has a **RM100 fee pending**.
+- Files are protected; anonymous access returns 404, authorized admin access works.
+
+## Admin flow to demo
+
+1. Login as admin → lands on `/admin`.
+2. **Tuntutan** → view death certificate, see matched Wasi Emas and appointed Wasi, verify/reject.
+3. **Sahkan IC & Lepaskan** on Siti Aminah’s claim → physical verification notes → release → waris notification log appears.
+4. **Undang-Undang** → record timestamp → upload final LHDN PDF → status becomes Active → activation notification log appears.
+5. **Fi** → see RM100 pending → mark fee deducted.
+6. **Laporan** → status counts, monthly activations, CSV export.
+7. **Rekod** → search user and edit phone/address.
+
+## Other fixes included
+
+- Dashboard “Lapor Kematian” route fixed.
+- Step-7 footer bypass fixed; upload is now the only submission path.
+- Wasi email input added in Step 2.
+- Step 1 now shows Wasi Emas only; Hibah/Waqaf removed from the current UI.
+- Dead `AddNomineeModal` and `AdminApprovals` removed.
+- Admin/login/signup labels translated to BM.
+- Protected file opening now uses a file token, so admin can view certificates and signed PDFs without making them public.
+- New migrations are reproducible; fresh `migrate up` was tested in a separate data directory.
+
+## Verification
+
+- `npx tsc -p tsconfig.app.json --noEmit`: pass
+- `npm run build`: pass
+- Touched-file ESLint: clean
+- Full `npm run lint`: 5 pre-existing errors remain in `test-distribution.ts`, `theme-provider.tsx`, `ui/badge.tsx`, `ui/button.tsx`, and `AuthContext.tsx`
+- Headless Chrome rendered `/admin`, `/admin/claims`, `/admin/legal-verification`, `/admin/fee-reporting`, `/admin/reports`, and `/admin/maintenance` with the seeded data.
+- API checks: public report creation works, forced verified status is blocked, anonymous user listing returns 0, anonymous file access returns 404, admin/wasi access works, signup works.
+
+## Reset demo data
+
+From `frontend`:
+
+```powershell
+node scripts/seed-local-demo.mjs
+```
+
+This deletes and recreates only the demo accounts and records. Use `node scripts/verify-local-demo.mjs` to confirm counts.
+
+## Remaining caveats
+
+- Remote pockethost still has the public `users` exposure; do not demo against it.
+- Wasi accounts are seeded manually, not yet auto-invited from the wizard.
+- Activation/waris notifications are visible logs, not real emails/SMS.
+- Early waris notification at claim submission is not implemented; release notification is.
+- Separate legal-firm role, QR, payment gateway, and KAB Gold panel remain deferred.
+- If you commit the local backend, either include `pb_data/storage` or rerun the seed script on the target machine.
+
+No commit was made.

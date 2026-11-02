@@ -1,13 +1,9 @@
-// src/lib/emailService.ts
-
-/**
- * Utility to handle automated email dispatches for the Wasiemas workflow.
- * For the prototype, this simulates network requests and logs the email templates.
- */
+import type { NotificationEntry } from './wasiemas';
 
 interface UserProfile {
     full_name: string;
     email: string;
+    phone?: string;
     nric_number?: string;
 }
 
@@ -17,42 +13,75 @@ interface WarisProfile {
     phone: string;
 }
 
+const notification = (
+    channel: NotificationEntry['channel'],
+    recipient: string,
+    subject: string
+): NotificationEntry => ({
+    channel,
+    recipient,
+    subject,
+    sent_at: new Date().toISOString(),
+});
+
 export const emailService = {
-    /**
-     * Phase 1: Sent when the Legal Firm uploads the LHDN stamped Wasiemas document.
-     */
-    async sendActivationEmails(pewasiat: UserProfile, wasiList: UserProfile[], wasiemasId: string) {
-        console.log("=== [EMAIL SERVICE: ACTIVATION PHASE] ===");
+    async sendActivationEmails(
+        pewasiat: UserProfile,
+        wasiList: UserProfile[],
+        wasiemasId: string
+    ): Promise<NotificationEntry[]> {
+        const entries: NotificationEntry[] = [];
+        const pewasiatSubject = `Wasi Emas Teraktif (${wasiemasId})`;
 
-        // 1. Email to Pewasiat
-        console.log(`[SENDING TO PEWASIAT] -> ${pewasiat.email}`);
-        console.log(`Subject: Wasiemas Teraktif (ID: ${wasiemasId})`);
-        console.log(`Body: Salam ${pewasiat.full_name}, dokumen Wasiemas anda telah disahkan dan dicop LHDN. Ia kini aktif dan selamat disimpan dalam awan KAB Gold.`);
+        console.log('=== [EMAIL SERVICE: ACTIVATION PHASE] ===');
+        if (pewasiat.email) {
+            console.log(`[SENDING TO PEWASIAT] -> ${pewasiat.email}`);
+            console.log(`Subject: ${pewasiatSubject}`);
+            console.log(
+                `Body: Salam ${pewasiat.full_name}, dokumen Wasi Emas anda telah disahkan dan dicop LHDN. Ia kini aktif dan selamat disimpan dalam awan KAB Gold.`
+            );
+            entries.push(notification('email', pewasiat.email, pewasiatSubject));
+        }
 
-        // 2. Email to all appointed Wasi
-        wasiList.forEach(wasi => {
+        wasiList.forEach((wasi) => {
+            if (!wasi.email) return;
+            const subject = `Pelantikan Wasi (${wasiemasId})`;
             console.log(`[SENDING TO WASI] -> ${wasi.email}`);
-            console.log(`Subject: Pelantikan Wasi (ID: ${wasiemasId})`);
-            console.log(`Body: Salam ${wasi.full_name}, anda telah dilantik sebagai Wasi (Pemegang Amanah) oleh ${pewasiat.full_name}. Sila simpan emel ini. Jika berlaku kematian, anda boleh membuat laporan dan tuntutan melalui portal KAB Gold.`);
+            console.log(`Subject: ${subject}`);
+            console.log(
+                `Body: Salam ${wasi.full_name}, anda telah dilantik sebagai Wasi (Pemegang Amanah) oleh ${pewasiat.full_name}. Sila simpan emel ini. Jika berlaku kematian, anda boleh membuat laporan dan tuntutan melalui portal KAB Gold.`
+            );
+            entries.push(notification('email', wasi.email, subject));
         });
 
-        console.log("=========================================");
-        return Promise.resolve(true);
+        console.log('=========================================');
+        return entries;
     },
 
-    /**
-     * Phase 2: Sent when the KAB Gold Admin physically verifies the Wasi and releases the gold.
-     */
-    async sendWarisNotifications(warisList: WarisProfile[], wasi: UserProfile, pewasiatName: string) {
-        console.log("=== [EMAIL SERVICE: EXECUTION PHASE] ===");
+    async sendWarisNotifications(
+        warisList: WarisProfile[],
+        wasi: UserProfile,
+        pewasiatName: string
+    ): Promise<NotificationEntry[]> {
+        const entries: NotificationEntry[] = [];
+        const subject = `Makluman Pelaksanaan Wasi Emas - ${pewasiatName}`;
 
-        warisList.forEach(waris => {
+        console.log('=== [EMAIL SERVICE: EXECUTION PHASE] ===');
+        warisList.forEach((waris) => {
             console.log(`[SENDING TO WARIS] -> ${waris.email} / SMS: ${waris.phone}`);
-            console.log(`Subject: Makluman Pelaksanaan Wasiemas - ${pewasiatName}`);
-            console.log(`Body: Salam ${waris.name}, dimaklumkan bahawa uncang emas peninggalan arwah ${pewasiatName} telah diserahkan kepada Wasi yang dilantik, iaitu ${wasi.full_name}, untuk ditadbir dan diagihkan. Sila berhubung dengan Wasi untuk urusan agihan harta.`);
+            console.log(`Subject: ${subject}`);
+            console.log(
+                `Body: Salam ${waris.name}, dimaklumkan bahawa uncang emas peninggalan arwah ${pewasiatName} telah diserahkan kepada Wasi yang dilantik, iaitu ${wasi.full_name}, untuk ditadbir dan diagihkan. Sila berhubung dengan Wasi untuk urusan agihan harta.`
+            );
+            if (waris.email) {
+                entries.push(notification('email', waris.email, subject));
+            }
+            if (waris.phone) {
+                entries.push(notification('sms', waris.phone, subject));
+            }
         });
 
-        console.log("=========================================");
-        return Promise.resolve(true);
-    }
+        console.log('=========================================');
+        return entries;
+    },
 };

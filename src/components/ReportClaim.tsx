@@ -35,10 +35,9 @@ export default function ReportClaim() {
             await pb.collection('demise_reports').create(formData);
             setIsSuccess(true);
 
-        } catch (err: any) {
-            // For the 3:00 PM Demo: If the collection doesn't exist yet, simulate success.
-            console.warn("PocketBase collection missing. Simulating success for demo.");
-            setIsSuccess(true);
+        } catch (error) {
+            console.error("Failed to submit demise report:", error);
+            setError("Gagal menghantar laporan kematian. Sila cuba lagi.");
         } finally {
             setIsLoading(false);
         }
@@ -49,10 +48,10 @@ export default function ReportClaim() {
             <div className="max-w-2xl mx-auto p-6 mt-10 text-center animate-in fade-in zoom-in duration-500">
                 <Card className="border-primary bg-primary/5">
                     <CardContent className="p-8 space-y-4">
-                        <h2 className="text-2xl font-bold text-primary">Demise Report Submitted</h2>
+                        <h2 className="text-2xl font-bold text-primary">Laporan Kematian Dihantar</h2>
                         <p className="text-muted-foreground">
-                            The death certificate has been securely forwarded to KAB Gold for verification.
-                            Once verified, the legally appointed Wasi will be granted access to initiate the asset claim process.
+                            Sijil kematian telah dihantar kepada KAB Gold untuk pengesahan.
+                            Selepas disahkan, Wasi yang dilantik boleh meneruskan proses tuntutan aset.
                         </p>
                     </CardContent>
                 </Card>
@@ -65,16 +64,16 @@ export default function ReportClaim() {
             <Card className="border-border shadow-sm">
                 <CardHeader className="bg-destructive/5 border-b border-destructive/10">
                     <CardTitle className="text-2xl text-destructive flex items-center gap-2">
-                        Report Account Holder Demise
+                        Lapor Kematian Pemegang Akaun
                     </CardTitle>
                     <CardDescription>
-                        This is a public form. Upload an official death certificate to notify KAB Gold of an account holder's passing.
+                        Borang ini terbuka kepada awam. Muat naik sijil kematian rasmi untuk memaklumkan KAB Gold.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <Label htmlFor="nric">Deceased Account Holder NRIC</Label>
+                            <Label htmlFor="nric">No. Kad Pengenalan Pemegang Akaun</Label>
                             <Input
                                 id="nric"
                                 required
@@ -86,7 +85,7 @@ export default function ReportClaim() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="reporter">Your Full Name</Label>
+                                <Label htmlFor="reporter">Nama Penuh Pelapor</Label>
                                 <Input
                                     id="reporter"
                                     required
@@ -96,7 +95,7 @@ export default function ReportClaim() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="contact">Your Contact Number</Label>
+                                <Label htmlFor="contact">No. Telefon Pelapor</Label>
                                 <Input
                                     id="contact"
                                     required
@@ -108,7 +107,7 @@ export default function ReportClaim() {
                         </div>
 
                         <div className="space-y-2 border-t border-border pt-4">
-                            <Label htmlFor="certificate">Upload Death Certificate (PDF/Image)</Label>
+                            <Label htmlFor="certificate">Muat Naik Sijil Kematian (PDF/Imej)</Label>
                             <Input
                                 id="certificate"
                                 type="file"
@@ -129,7 +128,7 @@ export default function ReportClaim() {
                         )}
 
                         <Button type="submit" variant="destructive" className="w-full" disabled={isLoading}>
-                            {isLoading ? "Submitting Report..." : "Submit Demise Report"}
+                            {isLoading ? "Menghantar Laporan..." : "Hantar Laporan Kematian"}
                         </Button>
                     </form>
                 </CardContent>

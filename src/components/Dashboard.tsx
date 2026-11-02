@@ -11,12 +11,12 @@ export default function Dashboard() {
         <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8 animate-in fade-in duration-500">
             {/* Overview Section */}
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-6">
-                <h1 className="text-3xl font-bold text-foreground">Welcome back, {user?.full_name}</h1>
+                <h1 className="text-3xl font-bold text-foreground">Selamat kembali, {user?.full_name}</h1>
                 <div className="mt-4 flex gap-3 text-muted-foreground">
                     <Info className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <p className="text-sm leading-relaxed">
-                        <strong className="text-foreground">System Overview:</strong> This Wasiemas Management System secures your KAB Gold assets.
-                        Use this dashboard to appoint an administrator (Wasi) who will safely manage and distribute your assets according to your legally bound document.
+                        <strong className="text-foreground">Ringkasan Sistem:</strong> Sistem Wasi Emas ini melindungi aset emas KAB Gold anda.
+                        Lantik Wasi (pemegang amanah) yang akan mentadbir dan mengagihkan aset mengikut dokumen yang disahkan.
                     </p>
                 </div>
             </div>
@@ -27,9 +27,9 @@ export default function Dashboard() {
                     <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                         <FileText className="h-6 w-6 text-primary" />
                     </div>
-                    <h2 className="text-xl font-bold mb-2 text-foreground">Create Wasiemas</h2>
+                    <h2 className="text-xl font-bold mb-2 text-foreground">Cipta Wasi Emas</h2>
                     <p className="text-sm text-muted-foreground flex-grow mb-6">
-                        Lantik Wasi (pentadbir) dan jana dokumen perundangan rasmi anda untuk mentadbir aset emas KAB Gold anda.
+                        Lantik Wasi (pemegang amanah) dan jana dokumen rasmi untuk mentadbir aset emas KAB Gold anda.
                     </p>
                     <Button
                         className="w-full"
@@ -45,7 +45,7 @@ export default function Dashboard() {
                     <div className="bg-destructive/10 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                         <AlertTriangle className="h-6 w-6 text-destructive" />
                     </div>
-                    <h2 className="text-xl font-bold mb-2 text-foreground">Report Demise</h2>
+                    <h2 className="text-xl font-bold mb-2 text-foreground">Lapor Kematian</h2>
                     <p className="text-sm text-muted-foreground flex-grow mb-6">
                         Laporkan kematian pemegang akaun dan muat naik sijil kematian untuk semakan pihak pengurusan KAB Gold.
                     </p>

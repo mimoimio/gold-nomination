@@ -9,7 +9,7 @@ import { ShieldCheck, ArrowRight, Send } from "lucide-react";
 
 export default function WasiClaimAssets() {
     const { user } = useAuth();
-    const [eligibleClaims, setEligibleClaims] = useState<any[]>([]);
+    const [eligibleClaims, setEligibleClaims] = useState<Array<Record<string, string>>>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -22,15 +22,8 @@ export default function WasiClaimAssets() {
                 });
                 setEligibleClaims(records);
             } catch (error) {
-                console.warn("Using fallback demo data for Wasi Claims");
-                // 3:00 PM Demo Data: Represents a verified death report ready for the Wasi to act upon
-                setEligibleClaims([{
-                    id: "REP-998",
-                    deceased_nric: "840510-14-5566",
-                    wasiemas_id: "WEMAS-123",
-                    status: "Verified",
-                    deceased_name: "Ahmad Zaha" // Using your provided name as a demo placeholder
-                }]);
+                console.error("Failed to load eligible wasi claims", error);
+                setEligibleClaims([]);
             } finally {
                 setIsLoading(false);
             }
@@ -57,8 +50,8 @@ export default function WasiClaimAssets() {
             setEligibleClaims(eligibleClaims.filter(claim => claim.id !== reportId));
             alert("Formal claim submitted to KAB Gold Admin successfully. Awaiting final asset release.");
         } catch (error) {
-            alert("Claim submission simulated for demo. The Admin will now see this in their dashboard.");
-            setEligibleClaims(eligibleClaims.filter(claim => claim.id !== reportId));
+            console.error("Failed to submit wasi claim", error);
+            alert("Gagal menghantar tuntutan Wasi. Sila cuba lagi.");
         } finally {
             setIsSubmitting(false);
         }

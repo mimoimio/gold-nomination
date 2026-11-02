@@ -14,11 +14,14 @@ import pb from './lib/pocketbase';
 import WasiClaimAssets from './components/WasiClaimAssets';
 import LegalFirmDashboard from './components/LegalFirmDashboard';
 import AdminFeeReporting from './components/AdminFeeReporting';
+import AdminOverview from './components/AdminOverview';
+import AdminReports from './components/AdminReports';
+import AdminMaintenance from './components/AdminMaintenance';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isValid, isAdmin } = useAuth();
   if (!isValid) return <Navigate to="/login" replace />;
-  if (isAdmin) return <Navigate to="/admin/claims" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />;
   return children;
 };
 
@@ -31,7 +34,7 @@ const AdminRoute = ({ children }: { children: JSX.Element }) => {
 const RootRoute = () => {
   const { isValid, isAdmin } = useAuth();
   if (!isValid) return <Navigate to="/login" replace />;
-  if (isAdmin) return <Navigate to="/admin/claims" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />;
   return <Navigate to="/dashboard" replace />;
 };
 
@@ -66,9 +69,12 @@ function App() {
               <Route path="/wasi/claim-assets" element={<ProtectedRoute><WasiClaimAssets /></ProtectedRoute>} />
 
               {/* Admin Routes */}
+              <Route path="/admin" element={<AdminRoute><AdminOverview /></AdminRoute>} />
               <Route path="/admin/claims" element={<AdminRoute><AdminClaimsDashboard /></AdminRoute>} />
               <Route path="/admin/legal-verification" element={<AdminRoute><LegalFirmDashboard /></AdminRoute>} />
               <Route path="/admin/fee-reporting" element={<AdminRoute><AdminFeeReporting /></AdminRoute>} />
+              <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
+              <Route path="/admin/maintenance" element={<AdminRoute><AdminMaintenance /></AdminRoute>} />
 
               <Route path="*" element={<RootRoute />} />
             </Routes>
